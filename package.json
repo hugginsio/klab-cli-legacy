@@ -1,0 +1,19 @@
+{
+  "name": "kinema-cli",
+  "version": "0.0.0",
+  "author": "Kyle Huggins (http://huggins.io/)",
+  "description": "The photo processing assistant.",
+  "license": "MIT",
+  "homepage": "https://github.com/kjhx/kinema-cli#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kjhx/kinema-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/kjhx/kinema-cli/issues"
+  },
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
