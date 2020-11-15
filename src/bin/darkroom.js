@@ -26,9 +26,9 @@ async function process(rawFiletype) {
     files.forEach(function (file) {
       const ext = path.extname(file);
       if (ext === rawFiletype) {
-        rawNames.push({ name: file, created: fs.statSync(file).birthtimeMs });
+        rawNames.push({ name: file, created: fs.statSync(file).birthtime });
       } else if (ext === '.JPG') {
-        jpgNames.push({ name: file, created: fs.statSync(file).birthtimeMs });
+        jpgNames.push({ name: file, created: fs.statSync(file).birthtime });
       }
     });
 
