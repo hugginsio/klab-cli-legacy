@@ -37,13 +37,13 @@ function searchArr(key, array) {
 }
 
 function getDate(timestamp) {
-  // Converts UNIX timestamp to format YYYY-MM-DD
+  // Converts timestamp to format YYYY-MM-DD
   const date = new Date(timestamp);
   let dateString = date.getFullYear();
   dateString += '-';
-  dateString += date.getMonth() < 10 ? '0' + date.getMonth() : date.getMonth();
+  dateString += date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1);
   dateString += '-';
-  dateString += date.getDay() < 10 ? '0' + date.getDay() : date.getDay();
+  dateString += date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
   return dateString;
 }
 
