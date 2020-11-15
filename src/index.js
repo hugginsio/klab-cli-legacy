@@ -14,9 +14,9 @@ program
   .action((rawFiletype) => darkroom.process(rawFiletype));
 
 program
-  .command('prune [directory]')
+  .command('prune [rawFiletype] [directory]')
   .description('delete RAW files that do not have a matching JPG')
-  .action((directory) => darkroom.prune(directory));
+  .action((rawFiletype, directory) => darkroom.prune(rawFiletype, directory));
 
 program
   .command('report')
