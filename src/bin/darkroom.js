@@ -20,7 +20,7 @@ async function process(rawFiletype) {
   // Collect all images into arrays
   fs.readdir(cwd, function (err, files) {
     if (err) {
-      log.err('Unable to scan directory: ' + err);
+      log.err(`Could not read directory: ${err.message}`);
     }
 
     files.forEach(function (file) {
@@ -75,13 +75,13 @@ async function process(rawFiletype) {
     log.info(`Created folders ${imageCal}`);
     rawNames.forEach(file => {
       fs.renameSync(file.name, `${util.getDate(file.created)}/RAW/${file.name}`, (err) => {
-        log.err(`Could not move file ${file.name}: ${err}`);
+        log.err(`Could not move file ${file.name}: ${err.message}`);
       });
     });
 
     jpgNames.forEach(file => {
       fs.renameSync(file.name, `${util.getDate(file.created)}/JPG/${file.name}`, (err) => {
-        log.err(`Could not move file ${file.name}: ${err}`);
+        log.err(`Could not move file ${file.name}: ${err.message}`);
       });
     });
 
@@ -89,8 +89,68 @@ async function process(rawFiletype) {
   });
 }
 
-function prune(directory) {
-  log.info(`Pruning ${directory}`);
+function prune(rawFiletype, directory) {
+  const cwd = (directory ? directory : nodeProcess.cwd()) + '/';
+
+  // Assume .ARW if not specified
+  if (!rawFiletype) {
+    rawFiletype = '.ARW';
+  } else {
+    rawFiletype = '.' + rawFiletype;
+  }
+
+  // Check if required subdirs exist
+  if (!fs.existsSync(cwd + 'RAW')) {
+    log.err('RAW directory does not exist.');
+  }
+  
+  if (!fs.existsSync(cwd + 'JPG')) {
+    log.err('JPG directory does not exist.');
+  }
+
+  // Build list of JPGs
+  let jpgNames = [];
+  let rawNames = [];
+
+  fs.readdir(cwd + 'JPG', (err, files) => {
+    if (err) {
+      log.err(`Could not read directory: ${err.message}`);
+    }
+
+    files.forEach((file) => {
+      const ext = path.extname(file);
+      if (ext === '.JPG') {
+        jpgNames.push(file);
+      }
+    });
+
+    fs.readdir(cwd + 'RAW', (err, files) => {
+      if (err) {
+        log.err(`Could not read directory: ${err.message}`);
+      }
+
+      files.forEach((file) => {
+        const ext = path.extname(file);
+        if (ext === rawFiletype) {
+          rawNames.push(file);
+        }
+      });
+
+      // Delete RAW files that don't have a JPEG counterpart
+      rawNames.forEach(file => {
+        const filename = util.noExt(file);
+        if (!jpgNames.includes(`${filename}.JPG`)) {
+          fs.unlink(cwd + 'RAW/' + file, err => {
+            if (err) {
+              log.err(`Could not delete ${file}: ${err.message}`);
+            }
+          });
+        }
+      });
+
+      log.info(`Deleted ${rawNames.length - jpgNames.length} RAW file(s).`);
+    });
+  });
 }
 
 module.exports = { process, prune };
