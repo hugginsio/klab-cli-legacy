@@ -4,6 +4,7 @@ const packageVersion = require('../package.json').version;
 const util = require('./bin/util');
 const darkroom = require('./bin/darkroom');
 const { program } = require('commander');
+const process = require('process');
 
 program.version(packageVersion);
 
@@ -13,19 +14,19 @@ program
   .action((rawFiletype) => darkroom.process(rawFiletype));
 
 program
-  .command('prune <directory>')
+  .command('prune [directory]')
   .description('delete RAW files that do not have a matching JPG')
-  .action((jpgDir, rawDir) => darkroom.prune(jpgDir, rawDir));
+  .action((directory) => darkroom.prune(directory));
 
-  program
+program
   .command('report')
   .description('create a new issue on GitHub')
-    .action(() => util.reportIssue());
+  .action(() => util.reportIssue());
 
 const main = async () => {
   util.cliHeader();
   util.updateCheck();
   program.parse(process.argv);
-}
+};
 
 main();

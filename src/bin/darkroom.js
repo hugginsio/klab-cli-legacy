@@ -33,7 +33,7 @@ async function process(rawFiletype) {
     });
 
     if (rawNames.length === 0 || jpgNames.length === 0) {
-      log.err(`No RAW or JPG files in current directory`);
+      log.err('No RAW or JPG files in current directory');
     } else {
       log.info(`Found ${rawNames.length} RAW, ${jpgNames.length} JPG in current directory`);
     }
@@ -75,13 +75,13 @@ async function process(rawFiletype) {
     log.info(`Created folders ${imageCal}`);
     rawNames.forEach(file => {
       fs.renameSync(file.name, `${util.getDate(file.created)}/RAW/${file.name}`, (err) => {
-        log.err(`Could not move file ${file.name}`);
+        log.err(`Could not move file ${file.name}: ${err}`);
       });
     });
 
     jpgNames.forEach(file => {
       fs.renameSync(file.name, `${util.getDate(file.created)}/JPG/${file.name}`, (err) => {
-        log.err(`Could not move file ${file.name}`);
+        log.err(`Could not move file ${file.name}: ${err}`);
       });
     });
 
@@ -89,8 +89,8 @@ async function process(rawFiletype) {
   });
 }
 
-function prune(jpgDir, rawDir) {
-  log.info('pruning');
+function prune(directory) {
+  log.info(`Pruning ${directory}`);
 }
 
 module.exports = { process, prune };
