@@ -1,7 +1,7 @@
 {
   "name": "klab-cli",
   "productName": "K-Lab CLI",
-  "version": "0.1.3-alpha",
+  "version": "0.2.0-alpha",
   "author": "Kyle Huggins (http://huggins.io/)",
   "description": "The photo processing assistant.",
   "license": "MIT",
