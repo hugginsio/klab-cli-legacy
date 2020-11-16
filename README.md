@@ -1,5 +1,5 @@
 # K-Lab CLI
-![GitHub Workflow Status](https://img.shields.io/github/workflow/status/kjhx/klab-cli/ci)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/kjhx/klab-cli/CI)
 ![npm](https://img.shields.io/npm/v/klab-cli)
 
 The photo processing assistant.
