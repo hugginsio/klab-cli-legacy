@@ -4,18 +4,16 @@ const util = require('./util');
 const fs = require('fs');
 const path = require('path');
 
-async function process(rawFiletype) {
+async function process(cmdObj) {
   // Organizes images into dirs named by date and subdirs named by filetype
   const cwd = nodeProcess.cwd();
+  let rawFiletype = cmdObj.rawfile;
+  let noSync = () => cmdObj.nosync ? '.nosync' : '';
   let rawNames = [];
   let jpgNames = [];
 
-  // Assume .ARW if not specified
-  if (!rawFiletype) {
-    rawFiletype = '.ARW';
-  } else {
-    rawFiletype = '.' + rawFiletype;
-  }
+  // Prepend '.' to rawFiletype
+  rawFiletype = rawFiletype[0] !== '.' ? '.' + rawFiletype : rawFiletype;
 
   // Collect all images into arrays
   fs.readdir(cwd, function (err, files) {
@@ -27,13 +25,13 @@ async function process(rawFiletype) {
       const ext = path.extname(file);
       if (ext === rawFiletype) {
         rawNames.push({ name: file, created: fs.statSync(file).birthtime });
-      } else if (ext === '.JPG') {
+      } else if (ext === '.JPG' || ext === '.JPEG') {
         jpgNames.push({ name: file, created: fs.statSync(file).birthtime });
       }
     });
 
     if (rawNames.length === 0 || jpgNames.length === 0) {
-      log.err('No RAW or JPG files in current directory');
+      log.err(`Found ${rawNames.length} RAW, ${jpgNames.length} JPG files in current directory.`);
     } else {
       log.info(`Found ${rawNames.length} RAW, ${jpgNames.length} JPG in current directory`);
     }
@@ -65,8 +63,8 @@ async function process(rawFiletype) {
     // Create folders and move files
     imageCal.forEach(element => {
       if (!fs.existsSync(element)) {
-        fs.mkdirSync(`${element}/RAW`, { recursive: true });
-        fs.mkdirSync(`${element}/JPG`, { recursive: true });
+        fs.mkdirSync(`${element}${noSync()}/RAW`, { recursive: true });
+        fs.mkdirSync(`${element}${noSync()}/JPG`, { recursive: true });
       } else {
         log.err(`Directory ${element} already exists.`);
       }
@@ -74,13 +72,13 @@ async function process(rawFiletype) {
 
     log.info(`Created folders ${imageCal}`);
     rawNames.forEach(file => {
-      fs.renameSync(file.name, `${util.getDate(file.created)}/RAW/${file.name}`, (err) => {
+      fs.renameSync(file.name, `${util.getDate(file.created)}${noSync()}/RAW/${file.name}`, (err) => {
         log.err(`Could not move file ${file.name}: ${err.message}`);
       });
     });
 
     jpgNames.forEach(file => {
-      fs.renameSync(file.name, `${util.getDate(file.created)}/JPG/${file.name}`, (err) => {
+      fs.renameSync(file.name, `${util.getDate(file.created)}${noSync()}/JPG/${file.name}`, (err) => {
         log.err(`Could not move file ${file.name}: ${err.message}`);
       });
     });
@@ -92,12 +90,8 @@ async function process(rawFiletype) {
 function prune(rawFiletype, directory) {
   const cwd = (directory ? directory : nodeProcess.cwd()) + '/';
 
-  // Assume .ARW if not specified
-  if (!rawFiletype) {
-    rawFiletype = '.ARW';
-  } else {
-    rawFiletype = '.' + rawFiletype;
-  }
+  // Prepend '.' to rawFiletype
+  rawFiletype = rawFiletype[0] !== '.' ? '.' + rawFiletype : rawFiletype;
 
   // Check if required subdirs exist
   if (!fs.existsSync(cwd + 'RAW')) {
@@ -119,7 +113,7 @@ function prune(rawFiletype, directory) {
 
     files.forEach((file) => {
       const ext = path.extname(file);
-      if (ext === '.JPG') {
+      if (ext === '.JPG' || ext === '.JPEG') {
         jpgNames.push(file);
       }
     });
