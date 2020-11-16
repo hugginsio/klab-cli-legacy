@@ -9,14 +9,17 @@ const process = require('process');
 program.version(packageVersion);
 
 program
-  .command('process [rawFiletype]')
+  .command('process')
   .description('organizes photos within current dir by date')
-  .action((rawFiletype) => darkroom.process(rawFiletype));
+  .option('-rf, --rawfile <type>', 'specify RAW file extension', 'ARW')
+  .option('-ns, --nosync', 'exclude folders from iCloud Drive (macOS only)', false)
+  .action((cmdObj) => darkroom.process(cmdObj));
 
 program
-  .command('prune [rawFiletype] [directory]')
+  .command('prune [directory]')
   .description('delete RAW files that do not have a matching JPG')
-  .action((rawFiletype, directory) => darkroom.prune(rawFiletype, directory));
+  .option('-rf, --rawfile <type>', 'specify RAW file extension', 'ARW')
+  .action((directory, cmdObj) => darkroom.prune(cmdObj.rawfile, directory));
 
 program
   .command('report')
