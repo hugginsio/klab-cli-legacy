@@ -11,14 +11,14 @@ program.version(packageVersion);
 program
   .command('process')
   .description('organizes photos within current dir by date')
-  .option('-rf, --rawfile <type>', 'specify RAW filetype', 'ARW')
+  .option('-rf, --rawfile <type>', 'specify RAW file extension', 'ARW')
   .option('-ns, --nosync', 'exclude folders from iCloud Drive (macOS only)', false)
   .action((cmdObj) => darkroom.process(cmdObj));
 
 program
   .command('prune [directory]')
   .description('delete RAW files that do not have a matching JPG')
-  .option('-rf, --rawfile <type>', 'specify RAW filetype', 'ARW')
+  .option('-rf, --rawfile <type>', 'specify RAW file extension', 'ARW')
   .action((directory, cmdObj) => darkroom.prune(cmdObj.rawfile, directory));
 
 program
