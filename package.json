@@ -22,7 +22,7 @@
     "lint": "eslint ./src",
     "dev": "npx tsc -w",
     "clean": "rm -rf ./dist",
-    "preinstall": "npm run build"
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "chalk": "^4.1.0",
