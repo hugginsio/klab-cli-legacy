@@ -73,13 +73,13 @@ export async function processImages(cmdObj: CommandObject): Promise<void> {
     log.info(`Created folders ${imageCal}`);
     rawNames.forEach(file => {
       fs.rename(file.name, `${getDate(file.created)}${noSync()}/RAW/${file.name}`, (err: Error | null) => {
-        log.err(`Could not move file ${file.name}: ${err?.message}`);
+        if (err) log.warn(`Could not move file ${file.name}: ${err?.message}`);
       });
     });
 
     jpgNames.forEach(file => {
       fs.rename(file.name, `${getDate(file.created)}${noSync()}/JPG/${file.name}`, (err: Error | null) => {
-        log.err(`Could not move file ${file.name}: ${err?.message}`);
+        if (err) log.warn(`Could not move file ${file.name}: ${err?.message}`);
       });
     });
 
