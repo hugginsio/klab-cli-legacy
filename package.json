@@ -1,7 +1,7 @@
 {
   "name": "klab-cli",
   "productName": "K-Lab CLI",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "author": "Kyle Huggins (http://huggins.io/)",
   "description": "The photo processing assistant.",
   "license": "MIT",
@@ -13,14 +13,16 @@
   "bugs": {
     "url": "https://github.com/kjhx/klab-cli/issues"
   },
-  "main": "src/index.js",
+  "main": "dist/src/index.js",
   "bin": {
-    "klab": "./src/index.js"
+    "klab": "./dist/src/index.js"
   },
   "scripts": {
-    "link": "npm link",
-    "unlink": "npm unlink",
-    "lint": "eslint ./src"
+    "build": "npx tsc",
+    "lint": "eslint ./src",
+    "dev": "npx tsc -w",
+    "clean": "rm -rf ./dist",
+    "preinstall": "npm run build"
   },
   "dependencies": {
     "chalk": "^4.1.0",
@@ -29,6 +31,11 @@
     "update-check": "^1.5.4"
   },
   "devDependencies": {
-    "eslint": "^7.13.0"
+    "@types/commander": "^2.12.2",
+    "@types/node": "^14.14.7",
+    "@typescript-eslint/eslint-plugin": "^4.8.0",
+    "@typescript-eslint/parser": "^4.8.0",
+    "eslint": "^7.13.0",
+    "typescript": "^4.0.5"
   }
 }
