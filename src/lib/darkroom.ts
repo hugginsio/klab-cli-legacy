@@ -1,16 +1,16 @@
-const nodeProcess = require('process');
-const log = require('./logger');
-const util = require('./util');
-const fs = require('fs');
-const path = require('path');
+import log from './logger';
+import { searchArr, getDate, noExt } from './util';
+import fs from 'fs';
+import path from 'path';
+import { CommandObject, File } from './interfaces';
 
-async function process(cmdObj) {
+export async function processImages(cmdObj: CommandObject): Promise<void> {
   // Organizes images into dirs named by date and subdirs named by filetype
-  const cwd = nodeProcess.cwd();
-  let rawFiletype = cmdObj.rawfile;
-  let noSync = () => cmdObj.nosync ? '.nosync' : '';
-  let rawNames = [];
-  let jpgNames = [];
+  const cwd = process.cwd();
+  let rawFiletype = cmdObj.rawfile as string;
+  const noSync = () => cmdObj.nosync ? '.nosync' : '';
+  const rawNames: File[] = [];
+  const jpgNames: File[] = [];
 
   // Prepend '.' to rawFiletype
   rawFiletype = rawFiletype[0] !== '.' ? '.' + rawFiletype : rawFiletype;
@@ -38,25 +38,25 @@ async function process(cmdObj) {
 
     // Verify pairings
     rawNames.forEach(file => {
-      const filename = util.noExt(file.name);
-      if (!util.searchArr(`${filename}.JPG`, jpgNames)) {
+      const filename = noExt(file.name);
+      if (!searchArr(`${filename}.JPG`, jpgNames)) {
         log.warn(`File ${file.name} has no counterpart.`);
       }
     });
 
     jpgNames.forEach(file => {
-      const filename = util.noExt(file.name);
-      if (!util.searchArr(`${filename}${rawFiletype}`, rawNames)) {
+      const filename = noExt(file.name);
+      if (!searchArr(`${filename}${rawFiletype}`, rawNames)) {
         log.warn(`File ${file.name} has no counterpart.`);
       }
     });
 
     // Collect file creation dates
-    let imageCal = [];
+    const imageCal: string[] = [];
 
     rawNames.forEach(file => {
-      if (!imageCal.includes(util.getDate(file.created))) {
-        imageCal.push(util.getDate(file.created));
+      if (!imageCal.includes(getDate(file.created))) {
+        imageCal.push(getDate(file.created));
       }
     });
 
@@ -72,14 +72,14 @@ async function process(cmdObj) {
 
     log.info(`Created folders ${imageCal}`);
     rawNames.forEach(file => {
-      fs.renameSync(file.name, `${util.getDate(file.created)}${noSync()}/RAW/${file.name}`, (err) => {
-        log.err(`Could not move file ${file.name}: ${err.message}`);
+      fs.rename(file.name, `${getDate(file.created)}${noSync()}/RAW/${file.name}`, (err: Error | null) => {
+        log.err(`Could not move file ${file.name}: ${err?.message}`);
       });
     });
 
     jpgNames.forEach(file => {
-      fs.renameSync(file.name, `${util.getDate(file.created)}${noSync()}/JPG/${file.name}`, (err) => {
-        log.err(`Could not move file ${file.name}: ${err.message}`);
+      fs.rename(file.name, `${getDate(file.created)}${noSync()}/JPG/${file.name}`, (err: Error | null) => {
+        log.err(`Could not move file ${file.name}: ${err?.message}`);
       });
     });
 
@@ -87,8 +87,8 @@ async function process(cmdObj) {
   });
 }
 
-function prune(rawFiletype, directory) {
-  const cwd = (directory ? directory : nodeProcess.cwd()) + '/';
+export function pruneDirectory(directory: string, rawFiletype: string): void {
+  const cwd = (directory ? directory : process.cwd()) + '/';
 
   // Prepend '.' to rawFiletype
   rawFiletype = rawFiletype[0] !== '.' ? '.' + rawFiletype : rawFiletype;
@@ -103,8 +103,8 @@ function prune(rawFiletype, directory) {
   }
 
   // Build list of JPGs
-  let jpgNames = [];
-  let rawNames = [];
+  const jpgNames: string[] = [];
+  const rawNames: string[] = [];
 
   fs.readdir(cwd + 'JPG', (err, files) => {
     if (err) {
@@ -132,7 +132,7 @@ function prune(rawFiletype, directory) {
 
       // Delete RAW files that don't have a JPEG counterpart
       rawNames.forEach(file => {
-        const filename = util.noExt(file);
+        const filename = noExt(file);
         if (!jpgNames.includes(`${filename}.JPG`)) {
           fs.unlink(cwd + 'RAW/' + file, err => {
             if (err) {
@@ -146,5 +146,3 @@ function prune(rawFiletype, directory) {
     });
   });
 }
-
-module.exports = { process, prune };
