@@ -1,6 +1,21 @@
 
-# Created by https://www.toptal.com/developers/gitignore/api/macos,vim,node,visualstudiocode
-# Edit at https://www.toptal.com/developers/gitignore?templates=macos,vim,node,visualstudiocode
+# Created by https://www.toptal.com/developers/gitignore/api/yarn,macos,visualstudiocode,node,git
+# Edit at https://www.toptal.com/developers/gitignore?templates=yarn,macos,visualstudiocode,node,git
+
+### Git ###
+# Created by git for backups. To disable backups in Git:
+# $ git config --global mergetool.keepBackup false
+*.orig
+
+# Created by git when using merge tools for conflicts
+*.BACKUP.*
+*.BASE.*
+*.LOCAL.*
+*.REMOTE.*
+*_BACKUP_*.txt
+*_BASE_*.txt
+*_LOCAL_*.txt
+*_REMOTE_*.txt
 
 ### macOS ###
 # General
@@ -142,27 +157,6 @@ dist
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 
-### Vim ###
-# Swap
-[._]*.s[a-v][a-z]
-!*.svg  # comment out if you don't need vector files
-[._]*.sw[a-p]
-[._]s[a-rt-v][a-z]
-[._]ss[a-gi-z]
-[._]sw[a-p]
-
-# Session
-Session.vim
-Sessionx.vim
-
-# Temporary
-.netrwhist
-*~
-# Auto-generated tag files
-tags
-# Persistent undo
-[._]*.un~
-
 ### VisualStudioCode ###
 .vscode/*
 !.vscode/tasks.json
@@ -174,7 +168,22 @@ tags
 .history
 .ionide
 
-# End of https://www.toptal.com/developers/gitignore/api/macos,vim,node,visualstudiocode
+### yarn ###
+# https://yarnpkg.com/advanced/qa#which-files-should-be-gitignored
+
+.yarn/*
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
+
+# if you are NOT using Zero-installs, then:
+# comment the following lines
+# !.yarn/cache
+
+# and uncomment the following lines
+.pnp.*
+
+# End of https://www.toptal.com/developers/gitignore/api/yarn,macos,visualstudiocode,node,git
 
 test copy*/
-dist/*
