@@ -22,14 +22,14 @@ klab
 Organizes photos within the current directory by date. It will create subdirectories for each date your photos were taken and organize the RAW and JPG shots into respective subdirectories.
 
 It supports the following options:
-* `-rf, --rawfile <type>`: specify the RAW file extension. Defaults to ARW.
-* `-ns, -nosync`:  exclude folders from iCloud Drive (macOS only) by appending `.nosync` to top-level folder names.
+* `-r, --rawfile <type>`: specify the RAW file extension. Defaults to ARW.
+* `-e, --exclude`:  exclude folders from iCloud Drive (macOS only) by appending `.nosync` to top-level folder names.
 
 ### `klab prune [options] [directory]`
 Deletes RAW files that do not have a matching JPG. Expects photos to be stored in `RAW` and `JPG` directories. Defaults to current directory, but can be passed any directory as an argument.
 
 It supports the following option:
-* `-rf, --rawfile <type>`: specify the RAW file extension. Defaults to ARW.
+* `-r, --rawfile <type>`: specify the RAW file extension. Defaults to ARW.
 
 ### `klab report`
 Opens the New Issue page of this repository in the default browser.
