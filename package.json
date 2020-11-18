@@ -22,7 +22,7 @@
     "lint": "eslint ./src",
     "klab": "yarn node ./dist/src/index.js",
     "dev": "tsc -w",
-    "prepublishOnly": "tsc"
+    "prepublishOnly": "yarn build"
   },
   "dependencies": {
     "chalk": "^4.1.0",
