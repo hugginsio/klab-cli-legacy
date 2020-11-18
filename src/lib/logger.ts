@@ -1,10 +1,6 @@
 import chalk from 'chalk';
 
 export default class log {
-  static br(): void {
-    console.log('');
-  }
-
   static info(msg: string): void {
     console.log(chalk.white(msg));
   }
