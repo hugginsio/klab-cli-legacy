@@ -28,7 +28,10 @@ program
   .action(() => reportIssue());
 
 const main = async () => {
-  cliHeader();
+  if (!process.argv.includes('-V') && !process.argv.includes('--version')) {
+    cliHeader();
+  }
+
   await updateCheck();
   program.parse(process.argv);
 };
