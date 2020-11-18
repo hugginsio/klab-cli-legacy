@@ -20,10 +20,9 @@
   "scripts": {
     "build": "tsc",
     "lint": "eslint ./src",
+    "klab": "yarn node ./dist/src/index.js",
     "dev": "tsc -w",
-    "clean": "rm -rf ./dist",
-    "postinstall": "tsc",
-    "klab": "yarn node ./dist/src/index.js"
+    "prepublishOnly": "tsc"
   },
   "dependencies": {
     "chalk": "^4.1.0",
