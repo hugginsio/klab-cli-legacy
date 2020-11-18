@@ -5,6 +5,6 @@ export const manifest = {
   productName: pkg.productName,
   version: pkg.version,
   bugs: pkg.bugs
-}
+};
 
 export default manifest;
