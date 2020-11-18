@@ -1,8 +1,8 @@
 /* eslint-disable no-magic-numbers */
 
-import * as manifest from '../../package.json';
+import manifest from '../manifest';
 import chalk from 'chalk';
-import updateCheckTool from 'update-check';
+import checkForUpdate from 'update-check';
 import logger from './logger';
 import open from 'open';
 import { File } from './interfaces';
@@ -12,7 +12,13 @@ export function cliHeader(): void {
 }
 
 export async function updateCheck(): Promise<void> {
-  const update = await updateCheckTool(manifest);
+  let update = null;
+
+  try {
+    update = await checkForUpdate(manifest);
+  } catch (err) {
+    console.error(`Failed to check for updates: ${err}`);
+  }
 
   if (update) {
     console.log(`${chalk.bgRed('UPDATE AVAILABLE')} Run '${chalk.cyan(`npm i -g ${manifest.name}@latest`)}' to install.\n`);

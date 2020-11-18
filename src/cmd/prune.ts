@@ -1,9 +1,9 @@
-import log from './logger';
-import { noExt } from './util';
+import log from '../lib/logger';
+import { noExt } from '../lib/util';
 import fs from 'fs';
 import path from 'path';
 
-export function pruneDirectory(directory: string, rawFiletype: string): void {
+export default function pruneImages(directory: string, rawFiletype: string): void {
   const cwd = (directory ? directory : process.cwd()) + '/';
 
   // Prepend '.' to rawFiletype
@@ -13,7 +13,7 @@ export function pruneDirectory(directory: string, rawFiletype: string): void {
   if (!fs.existsSync(cwd + 'RAW')) {
     log.err('RAW directory does not exist.');
   }
-  
+
   if (!fs.existsSync(cwd + 'JPG')) {
     log.err('JPG directory does not exist.');
   }
