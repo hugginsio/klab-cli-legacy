@@ -1,37 +1,65 @@
-## Welcome to GitHub Pages
+# K-Lab CLI
 
-You can use the [editor on GitHub](https://github.com/kjhx/klab-cli/edit/master/docs/index.md) to maintain and preview the content for your website in Markdown files.
-
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
-
-### Markdown
-
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+K-Lab is a tool built around how I process photos. In-camera, I'll choose to shoot RAW+JPG. Before I can post-process, I'll offload all the images into a single directory, like this:
+```
+.
+├── KJH02989.ARW
+├── KJH02989.JPG
+├── KJH02990.ARW
+└── KJH02990.JPG
 ```
 
-For more details see [Basic writing and formatting syntax](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax).
+I can then use `klab process` to organize my images by date and filetype, like so:
+```
+.
+├── 2020-05-21
+│   ├── JPG
+│   │   ├── KJH02989.JPG
+│   │   └── KJH02994.JPG
+│   └── RAW
+│       ├── KJH02989.ARW
+│       └── KJH02994.ARW
+└── 2020-05-22
+    ├── JPG
+    │   ├── KJH03128.JPG
+    │   └── KJH03136.JPG
+    └── RAW
+        ├── KJH03128.ARW
+        └── KJH03136.ARW
+```
 
-### Jekyll Themes
+Now, I can quickly flip through all of my JPGs from each day of shooting to decide which ones I want to keep – I'll delete the JPGs that I don't want. Then, I use `klab prune ./2020-05-21` to automatically delete RAW files that don't have a matching JPG for that day. This leaves me with only the RAW files that I want to edit.
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/kjhx/klab-cli/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+## Manual
 
-### Support or Contact
+### `klab process [options]`
+Organizes photos within the current directory by date. It will create subdirectories for each date your photos were taken and organize the RAW and JPG shots into respective subdirectories.
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+It supports the following options:
+* `-r, --rawfile <type>`: specify the RAW file extension. Defaults to ARW.
+* `-e, --exclude`:  exclude folders from iCloud Drive (macOS only) by appending `.nosync` to top-level folder names.
+
+### `klab prune [options] [directory]`
+Deletes RAW files that do not have a matching JPG. Expects photos to be stored in `RAW` and `JPG` directories. Defaults to current directory, but can be passed any directory as an argument.
+
+It supports the following option:
+* `-r, --rawfile <type>`: specify the RAW file extension. Defaults to ARW.
+
+### `klab report`
+Opens the New Issue page of this repository in the default browser.
+
+## Installation
+
+First, install the package from NPM:
+```shell
+npm install -g klab-cli@latest
+```
+
+Once that's done, you can run the tool with this command:
+```shell
+klab
+```
+
+## Etymology
+
+"K-Lab" comes from the Kodak program (and processing machines) of the same name. The K-Lab program was created by Kodak in the late 90's to make processing Kodachrome film more accessible.
