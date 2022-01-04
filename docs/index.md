@@ -28,7 +28,7 @@ I can then use `klab process` to organize my images by date and filetype, like s
         └── KJH03136.ARW
 ```
 
-Now, I can quickly flip through all of my JPGs from each day of shooting to decide which ones I want to keep – I'll delete the JPGs that I don't want. Then, I use `klab prune ./2020-05-21` to automatically delete RAW files that don't have a matching JPG for that day. This leaves me with only the RAW files that I want to edit.
+Now, I can quickly flip through all of my JPGs from each day of shooting to decide which ones I want to keep – I'll delete the JPGs that I don't want. This is much faster than going through the RAW files, which take longer to preview due to their size. Then, I use `klab prune ./2020-05-21` to delete RAW files that don't have a matching JPG for that day. This leaves me with only the RAW files that I want to edit.
 
 ## Manual
 
@@ -55,7 +55,7 @@ First, install the package from NPM:
 npm install -g klab-cli@latest
 ```
 
-Once that's done, you can run the tool with this command:
+Once that's done, you're good to go:
 ```shell
 klab
 ```
